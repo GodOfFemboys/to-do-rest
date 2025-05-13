@@ -12,10 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    private final UserService customUserDetails;
+    private final UserService userService;
 
     public WebSecurityConfig(UserService customUserDetails) {
-        this.customUserDetails = customUserDetails;
+        this.userService = customUserDetails;
     }
 
     @Bean
@@ -24,7 +24,7 @@ public class WebSecurityConfig {
                 .csrf(csfr -> csfr.disable())
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated())
-                .userDetailsService(customUserDetails)
+                .userDetailsService(userService)
                 .httpBasic(Customizer.withDefaults())
                 .build();
 

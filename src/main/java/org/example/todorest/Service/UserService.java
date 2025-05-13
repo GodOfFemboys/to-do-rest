@@ -3,7 +3,6 @@ package org.example.todorest.Service;
 import org.example.todorest.Entity.User;
 import org.example.todorest.Repository.UserRepository;
 import org.example.todorest.Security.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,8 +19,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByName(username)
-                .orElseThrow( () -> new UsernameNotFoundException("User not found"));
-
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new CustomUserDetails(user);
     }
 
