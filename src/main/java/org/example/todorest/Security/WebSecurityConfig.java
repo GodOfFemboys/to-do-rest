@@ -25,7 +25,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated())
                 .userDetailsService(customUserDetails)
-                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
                 .build();
 
     }
