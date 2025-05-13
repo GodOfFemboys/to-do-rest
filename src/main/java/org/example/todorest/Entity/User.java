@@ -21,9 +21,10 @@ public class User {
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
-    @Column(name = "role",nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<RoleType> roleTypeSet = new HashSet<>();
+
     public User() {
     }
 
