@@ -1,15 +1,16 @@
 package org.example.todorest.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.example.todorest.deserializer.BooleanStrictDeserializer;
 
 public class CreateTaskDto {
     @NotBlank
     @Size(max = 255, message = "Description too long")
     private String description;
-    @NotNull(message = "Completed can't be null")
-    private boolean completed;
+    @JsonDeserialize(using = BooleanStrictDeserializer.class)
+    private Boolean completed;
 
     public String getDescription() {
         return description;
@@ -19,11 +20,11 @@ public class CreateTaskDto {
         this.description = description;
     }
 
-    public boolean isCompleted() {
+    public Boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 

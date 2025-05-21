@@ -25,11 +25,12 @@ public class TaskMapper {
         task.setCompleted(taskDto.isCompleted());
         return task;
     }
+
     public Task toEntity(CreateTaskDto createTaskDto, User user) {
         Task task = new Task();
         task.setDescription(createTaskDto.getDescription());
         task.setUser(user);
-        task.setCompleted(createTaskDto.isCompleted());
+        task.setCompleted(Boolean.TRUE.equals(createTaskDto.getCompleted())); // чтобы не заставлять юзера явно указывать true/false при создании.
         return task;
     }
 

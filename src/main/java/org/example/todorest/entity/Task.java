@@ -1,6 +1,5 @@
 package org.example.todorest.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 @Entity

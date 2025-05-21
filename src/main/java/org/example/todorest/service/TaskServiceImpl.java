@@ -1,5 +1,7 @@
 package org.example.todorest.service;
 
+import org.example.todorest.dto.CreateTaskDto;
+import org.example.todorest.dto.PatchTaskDto;
 import org.example.todorest.dto.TaskDto;
 import org.example.todorest.entity.Task;
 import org.example.todorest.entity.User;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -35,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto getTaskById(Long id) {
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
         // сравниваем не id тасок, а id user-ов
         if (!task.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You can't get the task");
@@ -44,46 +45,27 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto saveTask(Task task) {
+    public TaskDto saveTask(CreateTaskDto createTaskDto) {
 
         User user = customUserDetailsService.getCurrentUser();
-        if (task.getId() == null) { //необязательная строчка.
-            task.setUser(user);
-        }
+        Task task = taskMapper.toEntity(createTaskDto, user);
+        task.setUser(user);
         return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Override
-    public TaskDto patchTask(Map<String, Object> patch, Long id) {
+    public TaskDto patchTask(PatchTaskDto patchTaskDto, Long id) {
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found")); // если айди есть, но по нему ничего не находиться
         // валидация по юзеру
         if (!task.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You can't update the task"); //попытка изменить не свою таску
         }
-        // ВАЛИДАЦИЯ ДАННЫХ В JSON ЗАПРОСЕ
-        if (patch.containsKey("completed")) {
-            Object completed = patch.get("completed");
-            if (completed == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "completed cannot be null");
-            }
-            if (!(completed instanceof Boolean)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "completed must be true or false");
-            }
-            task.setCompleted((boolean) completed);
+        if (patchTaskDto.getCompleted() != null) {
+            task.setCompleted(patchTaskDto.getCompleted());
         }
-        if (patch.containsKey("description")) {
-            Object description = patch.get("description");
-            if (description == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "description cannot be null");
-            }
-            if (!(description instanceof String desc)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "description must be type String");
-            }
-            if (desc.length() > 255) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "description too long");
-            }
-            task.setDescription(desc);
+        if (patchTaskDto.getDescription() != null) {
+            task.setDescription(patchTaskDto.getDescription());
         }
         return taskMapper.toDto(taskRepository.save(task));
     }
