@@ -1,8 +1,8 @@
 package org.example.todorest;
 
-import org.example.todorest.Entity.RoleType;
-import org.example.todorest.Entity.User;
-import org.example.todorest.Repository.UserRepository;
+import org.example.todorest.entity.RoleType;
+import org.example.todorest.entity.User;
+import org.example.todorest.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

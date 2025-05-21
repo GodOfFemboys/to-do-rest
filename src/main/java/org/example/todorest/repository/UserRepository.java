@@ -1,6 +1,6 @@
-package org.example.todorest.Repository;
+package org.example.todorest.repository;
 
-import org.example.todorest.Entity.User;
+import org.example.todorest.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

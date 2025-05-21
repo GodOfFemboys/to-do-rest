@@ -1,19 +1,26 @@
-package org.example.todorest.Service;
+package org.example.todorest.service;
 
-import org.example.todorest.Entity.User;
-import org.example.todorest.Repository.UserRepository;
-import org.example.todorest.Security.CustomUserDetails;
+import org.example.todorest.entity.User;
+import org.example.todorest.repository.UserRepository;
+import org.example.todorest.security.CustomUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User getCurrentUser() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUserByName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override

@@ -1,6 +1,6 @@
-package org.example.todorest.Security;
+package org.example.todorest.security;
 
-import org.example.todorest.Entity.User;
+import org.example.todorest.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

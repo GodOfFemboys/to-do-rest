@@ -1,4 +1,4 @@
-package org.example.todorest.Entity;
+package org.example.todorest.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 
