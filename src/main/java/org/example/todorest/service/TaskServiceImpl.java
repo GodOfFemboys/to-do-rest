@@ -37,7 +37,6 @@ public class TaskServiceImpl implements TaskService {
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
-        // сравниваем не id тасок, а id user-ов
         if (!task.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You can't get the task");
         }
@@ -73,7 +72,6 @@ public class TaskServiceImpl implements TaskService {
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
-        // сравниваем не id тасок, а id user-ов
         if (!task.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You can't delete the task");
         }
