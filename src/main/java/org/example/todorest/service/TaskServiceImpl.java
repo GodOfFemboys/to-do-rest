@@ -46,10 +46,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto saveTask(CreateTaskDto createTaskDto) {
-
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskMapper.toEntity(createTaskDto, user);
-        task.setUser(user);
         return taskMapper.toDto(taskRepository.save(task));
     }
 
@@ -74,7 +72,7 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         User user = customUserDetailsService.getCurrentUser();
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
         // сравниваем не id тасок, а id user-ов
         if (!task.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You can't delete the task");

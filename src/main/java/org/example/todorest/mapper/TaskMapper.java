@@ -33,6 +33,4 @@ public class TaskMapper {
         task.setCompleted(Boolean.TRUE.equals(createTaskDto.getCompleted())); // чтобы не заставлять юзера явно указывать true/false при создании.
         return task;
     }
-
-
 }
