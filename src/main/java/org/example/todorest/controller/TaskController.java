@@ -26,26 +26,26 @@ public class TaskController {
         return ResponseEntity.ok(taskDto);
     }
 
-    @GetMapping("/task/{id}")
+    @GetMapping("/tasks/{id}")
     public ResponseEntity<TaskDto> getTaskById(@PathVariable Long id) {
         TaskDto taskDto = taskService.getTaskById(id);
         return ResponseEntity.ok(taskDto);
     }
 
-    @PostMapping("/task")
+    @PostMapping("/tasks")
     public ResponseEntity<TaskDto> addTask(@Valid @RequestBody CreateTaskDto createTaskDto) {
         TaskDto saved = taskService.saveTask(createTaskDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
     }
 
-    @PatchMapping("/task/{id}")
+    @PatchMapping("/tasks/{id}")
     public ResponseEntity<TaskDto> updateTask(@Valid @RequestBody PatchTaskDto patchTaskDto, @PathVariable Long id) {
         TaskDto saved = taskService.patchTask(patchTaskDto, id);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/task/{id}")
+    @DeleteMapping("/tasks/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
