@@ -26,6 +26,7 @@ public class WebSecurityConfig {
                 .csrf(csfr -> csfr.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("api/auth/register").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(customUserDetailsService)
                 .httpBasic(Customizer.withDefaults())
