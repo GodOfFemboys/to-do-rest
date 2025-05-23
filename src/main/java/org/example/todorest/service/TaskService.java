@@ -13,7 +13,7 @@ public interface TaskService {
 
     TaskDto saveTask(CreateTaskDto createTaskDto);
 
-    public TaskDto patchTask(PatchTaskDto patchTaskDto, Long id);
+    TaskDto patchTask(PatchTaskDto patchTaskDto, Long id);
 
     void deleteTask(Long id);
 

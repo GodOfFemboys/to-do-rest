@@ -11,10 +11,10 @@ import java.io.IOException;
 public class BooleanStrictDeserializer extends JsonDeserializer<Boolean> {
 
     @Override
-    public Boolean deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public Boolean deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String value = jsonParser.getText();
         if ("true".equalsIgnoreCase(value)) return true;
         if ("false".equalsIgnoreCase(value)) return false;
-        throw new JsonMappingException(jsonParser,"Only 'true' or 'false' are accepted (case-insensitive)");
+        throw new JsonMappingException(jsonParser, "Only 'true' or 'false' are accepted (case-insensitive)");
     }
 }
