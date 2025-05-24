@@ -17,7 +17,7 @@ public class Task {
     private String description;
     @ManyToOne()
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
     @Column(nullable = false)
     private boolean completed = false;
 

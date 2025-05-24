@@ -27,7 +27,7 @@ public class User {
     private Set<RoleType> roleTypeSet = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Task> tasks;
+    private List<Task> tasks;
 
     public User() {
     }
