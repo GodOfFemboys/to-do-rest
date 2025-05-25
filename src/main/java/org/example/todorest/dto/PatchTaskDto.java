@@ -12,7 +12,6 @@ import org.example.todorest.deserializer.BooleanStrictDeserializer;
 @Setter
 @NoArgsConstructor
 public class PatchTaskDto {
-    @NotBlank
     @Size(max = 255, message = "Description too long")
     private String description;
     @JsonDeserialize(using = BooleanStrictDeserializer.class)
