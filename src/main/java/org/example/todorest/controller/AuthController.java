@@ -1,5 +1,6 @@
 package org.example.todorest.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.todorest.dto.RegisterRequest;
 import org.example.todorest.service.RegistrationService;
 import org.springframework.http.HttpStatus;
@@ -11,12 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final RegistrationService registrationService;
-
-    public AuthController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
