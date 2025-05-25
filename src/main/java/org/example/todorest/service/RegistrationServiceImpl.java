@@ -1,5 +1,6 @@
 package org.example.todorest.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.todorest.dto.RegisterRequest;
 import org.example.todorest.entity.RoleType;
 import org.example.todorest.entity.User;
@@ -12,14 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
     public final UserRepository userRepository;
     public final PasswordEncoder passwordEncoder;
-
-    public RegistrationServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
-        this.userRepository = repository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public void register(RegisterRequest request) {

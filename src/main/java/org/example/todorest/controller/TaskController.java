@@ -1,6 +1,7 @@
 package org.example.todorest.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.example.todorest.dto.CreateTaskDto;
 import org.example.todorest.dto.PatchTaskDto;
 import org.example.todorest.dto.TaskDto;
@@ -13,12 +14,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
-
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getAllTasks() {

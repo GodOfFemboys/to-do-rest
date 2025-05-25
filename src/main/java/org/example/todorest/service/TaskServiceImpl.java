@@ -1,5 +1,6 @@
 package org.example.todorest.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.todorest.dto.CreateTaskDto;
 import org.example.todorest.dto.PatchTaskDto;
 import org.example.todorest.dto.TaskDto;
@@ -15,16 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final CustomUserDetailsService customUserDetailsService;
     private final TaskMapper taskMapper;
-
-    public TaskServiceImpl(TaskRepository taskRepository, CustomUserDetailsService customUserDetailsService, TaskMapper taskMapper) {
-        this.taskRepository = taskRepository;
-        this.customUserDetailsService = customUserDetailsService;
-        this.taskMapper = taskMapper;
-    }
 
     @Override
     public List<TaskDto> getAllTasks() {
