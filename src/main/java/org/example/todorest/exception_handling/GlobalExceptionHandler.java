@@ -99,38 +99,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(500).body(err);
     }
 
-//    // Доп., потом прочитать че и за чем
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
-//        List<String> details = ex.getConstraintViolations().stream()
-//                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-//                .toList();
-//
-//        ErrorResponse err = new ErrorResponse(
-//                400,
-//                "Bad Request",
-//                "Validation failed",
-//                request.getRequestURI(),
-//                LocalDateTime.now(),
-//                details
-//        );
-//        return ResponseEntity.badRequest().body(err);
-//    }
-//
-//    @ExceptionHandler(EntityNotFoundException.class)
-//    public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
-//        log.warn("Entity not found: {}", ex.getMessage(), ex);
-//        ErrorResponse err = new ErrorResponse(
-//                404,
-//                "Not Found",
-//                ex.getMessage(),
-//                request.getRequestURI(),
-//                LocalDateTime.now()
-//        );
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
-//    }
-
-
     //когда клиент использует неподдерживаемый HTTP-метод.
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception, HttpServletRequest request) {
