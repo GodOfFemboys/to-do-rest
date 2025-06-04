@@ -56,8 +56,13 @@
     <div v-else>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Ваши задачи</h3>
-            <button class="btn btn-outline-danger" @click="logout">Выйти</button>
+            <div>
+                <span class="me-3">Привет, <strong>{{ username }}</strong></span>
+                <button class="btn btn-outline-danger" @click="logout">Выйти</button>
+            </div>
         </div>
+
+        <input v-model="searchQuery" type="text" class="form-control mb-3" placeholder="Поиск задач...">
 
         <form class="row g-2 mb-4" @submit.prevent="addTask">
             <div class="col-8">
@@ -68,9 +73,9 @@
             </div>
         </form>
 
-        <div v-if="tasks.length === 0" class="text-muted">Нет задач</div>
+        <div v-if="filteredTasks.length === 0" class="text-muted">Нет задач</div>
         <ul class="list-group">
-            <li v-for="task in tasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center">
+            <li v-for="task in filteredTasks" :key="task.id" class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <input type="checkbox" v-model="task.completed" @change="toggleTask(task)" class="form-check-input me-2">
                     <span :class="{ 'text-decoration-line-through': task.completed }">{{ task.description }}</span>
@@ -95,7 +100,25 @@
                 loginError: '',
                 registerErrors: {},
                 tasks: [],
-                newTask: { description: '', completed: false }
+                newTask: { description: '', completed: false },
+                searchQuery: ''
+            }
+        },
+        computed: {
+            username() {
+                if (!this.token) return '';
+                try {
+                    const base64 = this.token.split(' ')[1]; // после "Basic "
+                    const decoded = atob(base64);
+                    return decoded.split(':')[0];
+                } catch {
+                    return '';
+                }
+            },
+            filteredTasks() {
+                if (!this.searchQuery) return this.tasks;
+                const query = this.searchQuery.toLowerCase();
+                return this.tasks.filter(task => task.description.toLowerCase().includes(query));
             }
         },
         methods: {
@@ -138,6 +161,7 @@
                 localStorage.removeItem('token');
                 this.token = null;
                 this.tasks = [];
+                this.searchQuery = '';
             },
             async fetchTasks() {
                 const res = await api.get('/tasks', {
