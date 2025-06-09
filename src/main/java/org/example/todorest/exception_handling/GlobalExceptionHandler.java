@@ -25,13 +25,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResponseStatus(ResponseStatusException exception, HttpServletRequest request) {
         log.warn("Custom exception: {}", exception.getReason());
 
-        ErrorResponse err = new ErrorResponse(
-                exception.getStatusCode().value(),
-                HttpStatus.valueOf(exception.getStatusCode().value()).getReasonPhrase(), // error
-                exception.getReason(),
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+        ErrorResponse err = ErrorResponse.builder()
+                .status(exception.getStatusCode().value())
+                .error(HttpStatus.valueOf(exception.getStatusCode().value()).getReasonPhrase())
+                .message(exception.getReason())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity
                 .status(exception.getStatusCode())
                 .body(err);
@@ -44,13 +45,14 @@ public class GlobalExceptionHandler {
         String cleanMessage = fullMessage.contains("\n")
                 ? fullMessage.substring(0, fullMessage.indexOf("\n"))
                 : fullMessage;
-        ErrorResponse err = new ErrorResponse(
-                400,
-                "Bad Request",
-                cleanMessage,
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+
+        ErrorResponse err = ErrorResponse.builder()
+                .status(400)
+                .error("Bad Request")
+                .message(cleanMessage)
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
 
         return ResponseEntity.badRequest().body(err);
     }
@@ -58,44 +60,50 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException exception, HttpServletRequest request) {
         log.warn("ValidException {}", exception.getMessage(), exception);
+
         List<String> errors = exception.getBindingResult().getFieldErrors()
                 .stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
                 .toList();
-        ErrorResponse err = new ErrorResponse(
-                400,
-                "Bad Request",
-                "Validation failed",
-                request.getRequestURI(),
-                LocalDateTime.now(),
-                errors
-        );
+        ErrorResponse err = ErrorResponse.builder()
+                .status(400)
+                .error("Bad Request")
+                .message("Validation failed")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .errors(errors)
+                .build();
+
         return ResponseEntity.badRequest().body(err);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException exception, HttpServletRequest request) {
         log.warn("AccessDeniedException {}", exception.getMessage(), exception);
-        ErrorResponse err = new ErrorResponse(
-                403,
-                "Forbidden",
-                "Access is denied",
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+
+        ErrorResponse err = ErrorResponse.builder()
+                .status(403)
+                .error("Forbidden")
+                .message("Access is denied")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAll(Exception exception, HttpServletRequest request) {
         log.error("Unexpected error", exception);
-        ErrorResponse err = new ErrorResponse(
-                500,
-                "Internal Server Error",
-                "Что-то пошло не так. Мы уже работаем над этим.",
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+
+        ErrorResponse err = ErrorResponse.builder()
+                .status(500)
+                .error("Internal Server Error")
+                .message("Что-то пошло не так. Мы уже работаем над этим.")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.status(500).body(err);
     }
 
@@ -104,13 +112,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception, HttpServletRequest request) {
         log.warn("Unsupported HTTP method: {}", exception.getMethod(), exception);
 
-        ErrorResponse err = new ErrorResponse(
-                405,
-                "Method Not Allowed",
-                "HTTP метод не поддерживается для этого эндпоинта",
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+        ErrorResponse err = ErrorResponse.builder()
+                .status(405)
+                .error("Method Not Allowed")
+                .message("HTTP метод не поддерживается для этого эндпоинта")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(err);
     }
 
@@ -119,13 +128,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMediaTypeNotSupported(HttpMediaTypeNotSupportedException exception, HttpServletRequest request) {
         log.warn("Unsupported media type: {}", exception.getContentType(), exception);
 
-        ErrorResponse err = new ErrorResponse(
-                415,
-                "Unsupported Media Type",
-                "Тип содержимого запроса не поддерживается. Используйте application/json.",
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+        ErrorResponse err = ErrorResponse.builder()
+                .status(415)
+                .error("Unsupported Media Type")
+                .message("Тип содержимого запроса не поддерживается. Используйте application/json.")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(err);
     }
 
@@ -134,13 +144,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException exception, HttpServletRequest request) {
         log.warn("Unknown endpoint: {}", request.getRequestURI(), exception);
 
-        ErrorResponse err = new ErrorResponse(
-                404,
-                "Not Found",
-                "Эндпоинт не найден: " + request.getRequestURI(),
-                request.getRequestURI(),
-                LocalDateTime.now()
-        );
+        ErrorResponse err = ErrorResponse.builder()
+                .status(404)
+                .error("Not Found")
+                .message("Эндпоинт не найден: " + request.getRequestURI())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
 
